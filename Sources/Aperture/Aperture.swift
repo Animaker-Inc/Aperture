@@ -167,9 +167,13 @@ public final class Aperture: NSObject {
     @objc func updateRecording(){
         output.stopRecording()
         timerCount += 1
-        var strURL : String = String(destination.absoluteString.dropLast(4))
-        strURL = strURL + "\(timerCount).mp4"
-        output.startRecording(to: URL(fileURLWithPath: strURL), recordingDelegate: self)
+        output.startRecording(to: tempFile(), recordingDelegate: self)
+    }
+    func tempFile() -> URL{
+        let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
+        let documentPath_ = searchPaths.first
+        let pathToSave = "\(documentPath_!)/tk/screenCapture\(timerCount).mp4"
+        return URL(fileURLWithPath: pathToSave)
     }
 
 	public func stop() {
