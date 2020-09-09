@@ -175,6 +175,9 @@ public final class Aperture: NSObject {
 		sleep(for: 0.1)
 
 		self.session.stopRunning()
+
+	
+
 	}
 
 	public func pause() {
@@ -206,7 +209,7 @@ extension Aperture: AVCaptureFileOutputRecordingDelegate {
 
 	public func fileOutput(_ captureOutput: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Swift.Error?) {
 		shouldPreventSleep = false
-		onFinish?(error)
+		// onFinish?(error)
 	}
 
 	public func fileOutput(_ output: AVCaptureFileOutput, didPauseRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
