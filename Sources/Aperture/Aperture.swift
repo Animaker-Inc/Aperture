@@ -160,7 +160,7 @@ public final class Aperture: NSObject {
 		// timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
 		updateRecording()
 	}
-    @objc func updateRecording(){
+    func updateRecording(){
         // output.stopRecording()
         // timerCount += 1
         // var strURL : String = String(destination.absoluteString.dropLast(4))
