@@ -157,15 +157,15 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
-		timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: true)
+		timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
 
 	}
     @objc func updateRecording(){
-        output.stopRecording()
-        timerCount += 1
-        var strURL : String = String(destination.absoluteString.dropLast(4))
-        strURL = strURL + "\(timerCount).mp4"
-        output.startRecording(to: URL(fileURLWithPath: strURL), recordingDelegate: self)
+        // output.stopRecording()
+        // timerCount += 1
+        // var strURL : String = String(destination.absoluteString.dropLast(4))
+        // strURL = strURL + "\(timerCount).mp4"
+        // output.startRecording(to: URL(fileURLWithPath: strURL), recordingDelegate: self)
     }
 
 	public func stop() {
