@@ -157,8 +157,8 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
-		timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
-
+		// timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
+		updateRecording()
 	}
     @objc func updateRecording(){
         // output.stopRecording()
