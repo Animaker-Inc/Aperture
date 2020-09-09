@@ -10,7 +10,7 @@ public final class Aperture: NSObject {
 		case couldNotAddOutput
 	}
 
-	private let destination: URL
+	var destination: URL
 	private let session: AVCaptureSession
 	private let output: AVCaptureMovieFileOutput
 	private var activity: NSObjectProtocol?
@@ -21,6 +21,8 @@ public final class Aperture: NSObject {
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
 	public var isPaused: Bool { output.isRecordingPaused }
+    var timer = Timer()
+    var timerCount = 0
 
 	private init(
 		destination: URL,
@@ -155,7 +157,16 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
+        timer = Timer.scheduledTimer(timeInterval: TimeInterval(2), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: true)
+
 	}
+    @objc func updateRecording(){
+        output.stopRecording()
+        timerCount += 1
+        var strURL : String = String(destination.absoluteString.dropLast(4))
+        strURL = strURL + "\(timerCount).mp4"
+        output.startRecording(to: URL(fileURLWithPath: strURL), recordingDelegate: self)
+    }
 
 	public func stop() {
 		output.stopRecording()
