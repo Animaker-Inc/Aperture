@@ -157,7 +157,7 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
-		timer = Timer.scheduledTimer(timeInterval: TimeInterval(2), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: true)
+		timer = Timer.scheduledTimer(timeInterval: TimeInterval(10), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: true)
 
 	}
     @objc func updateRecording(){
@@ -209,7 +209,7 @@ extension Aperture: AVCaptureFileOutputRecordingDelegate {
 
 	public func fileOutput(_ captureOutput: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Swift.Error?) {
 		shouldPreventSleep = false
-		// onFinish?(error)
+		onFinish?(error)
 	}
 
 	public func fileOutput(_ output: AVCaptureFileOutput, didPauseRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
