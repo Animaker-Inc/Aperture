@@ -165,9 +165,10 @@ public final class Aperture: NSObject {
         // })
 	}
     @objc func updateRecording(){
-        output.stopRecording()
         timerCount += 1
         output.startRecording(to: tempFile(), recordingDelegate: self)
+		output.stopRecording()
+
     }
     func tempFile() -> URL{
         let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
