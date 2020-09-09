@@ -17,6 +17,8 @@ public final class Aperture: NSObject {
 
 	public var onStart: (() -> Void)?
 	public var onFinish: ((Swift.Error?) -> Void)?
+		public var onFullFinish: ((Swift.Error?) -> Void)?
+
 	public var onPause: (() -> Void)?
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
@@ -157,10 +159,10 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
-		// timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
-            self.updateRecording()
-        })
+		timer = Timer.scheduledTimer(timeInterval: TimeInterval(10), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
+        // DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+        //     self.updateRecording()
+        // })
 	}
     func updateRecording(){
         output.stopRecording()
@@ -178,7 +180,8 @@ public final class Aperture: NSObject {
 
 		self.session.stopRunning()
 
-	
+		onFullFinish?(nil)
+
 
 	}
 
