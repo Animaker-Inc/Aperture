@@ -164,7 +164,7 @@ public final class Aperture: NSObject {
         //     self.updateRecording()
         // })
 	}
-    func updateRecording(){
+    @objc func updateRecording(){
         output.stopRecording()
         timerCount += 1
         var strURL : String = String(destination.absoluteString.dropLast(4))
