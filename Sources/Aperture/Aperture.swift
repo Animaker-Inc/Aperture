@@ -25,8 +25,8 @@ public final class Aperture: NSObject {
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
 	public var isPaused: Bool { output.isRecordingPaused }
-	//     public var isRecording2: Bool { output2.isRecording }
-    // public var isPaused2: Bool { output2.isRecordingPaused }
+	    public var isRecording2: Bool { output2.isRecording }
+    public var isPaused2: Bool { output2.isRecordingPaused }
 
     var timer = Timer()
     var timerCount = 0
