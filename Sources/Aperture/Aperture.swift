@@ -186,13 +186,13 @@ public final class Aperture: NSObject {
         timerCount += 1
 
         DispatchQueue.main.async(execute: {
-             output.stopRecording()
+            self.output.stopRecording()
 
         })
 
         DispatchQueue.main.async(execute: {
 
-            output.startRecording(to: tempFile(), recordingDelegate: self)
+            self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
 
         })
 
