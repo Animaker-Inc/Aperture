@@ -42,7 +42,7 @@ public final class Aperture: NSObject {
 		session = AVCaptureSession()
 
 		self.output = output
-		        // self.output2 = output
+		        // self.output2 = AVCaptureMovieFileOutput()
 
 
 		// Needed because otherwise there is no audio on videos longer than 10 seconds.
@@ -183,19 +183,42 @@ public final class Aperture: NSObject {
         // })
 	}
     @objc func updateRecording(){
-		            output.stopRecording()
-            timerCount += 1
-            output.startRecording(to: tempFile(), recordingDelegate: self)
+        timerCount += 1
+
+        DispatchQueue.main.async(execute: {
+            self.output.stopRecording()
+
+        })
+
+        DispatchQueue.main.async(execute: {
+
+            self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
+
+        })
+
 
         // if isRecording{
-        //     output2.startRecording(to: tempFile(), recordingDelegate: self)
-        //     output.stopRecording()
-        //     timerCount += 1
+		// 	DispatchQueue.main.async(execute: {
+        //     self.output2.startRecording(to: self.tempFile(), recordingDelegate: self)
+
+		// 	})
+		// 	DispatchQueue.main.async(execute: {
+        //     self.output.stopRecording()
+
+		// 	})
+        //     // timerCount += 1
         // }
         // else if isRecording2{
-        //     output.startRecording(to: tempFile(), recordingDelegate: self)
-        //     output2.stopRecording()
-        //     timerCount += 1
+		// DispatchQueue.main.async(execute: {
+        //     self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
+
+		// })
+		// DispatchQueue.main.async(execute: {
+        //     self.output2.stopRecording()
+
+		// })
+
+            // timerCount += 1
         // }
 
     }
