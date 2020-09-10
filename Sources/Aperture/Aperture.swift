@@ -203,6 +203,8 @@ public final class Aperture: NSObject {
 
 	public func stop() {
         if isRecording{
+
+			
             output.stopRecording()
         }
         else if isRecording2{
