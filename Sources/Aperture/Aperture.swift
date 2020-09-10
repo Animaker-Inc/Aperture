@@ -13,6 +13,8 @@ public final class Aperture: NSObject {
 	var destination: URL
 	private let session: AVCaptureSession
 	private let output: AVCaptureMovieFileOutput
+	    // private let output2: AVCaptureMovieFileOutput
+
 	private var activity: NSObjectProtocol?
 
 	public var onStart: (() -> Void)?
@@ -23,6 +25,9 @@ public final class Aperture: NSObject {
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
 	public var isPaused: Bool { output.isRecordingPaused }
+	//     public var isRecording2: Bool { output2.isRecording }
+    // public var isPaused2: Bool { output2.isRecordingPaused }
+
     var timer = Timer()
     var timerCount = 0
 
@@ -37,10 +42,13 @@ public final class Aperture: NSObject {
 		session = AVCaptureSession()
 
 		self.output = output
+		        // self.output2 = output
+
 
 		// Needed because otherwise there is no audio on videos longer than 10 seconds.
 		// https://stackoverflow.com/a/26769529/64949
 		output.movieFragmentInterval = .invalid
+        // output2.movieFragmentInterval = .invalid
 
 		if let audioDevice = audioDevice {
 			if !audioDevice.hasMediaType(.audio) {
@@ -61,18 +69,28 @@ public final class Aperture: NSObject {
 		} else {
 			throw Error.couldNotAddScreen
 		}
-
+        // if session.canAddOutput(output2) {
+        //     session.addOutput(output2)
+        // } else {
+        //     throw Error.couldNotAddOutput
+        // }
 		if session.canAddOutput(output) {
 			session.addOutput(output)
 		} else {
 			throw Error.couldNotAddOutput
 		}
+        
+
+
 
 		// TODO: Default to HEVC when on 10.13 or newer and encoding is hardware supported. Without hardware encoding I got 3 FPS full screen recording.
 		// TODO: Find a way to detect hardware encoding support.
 		// Hardware encoding is supported on 6th gen Intel processor or newer.
 		if let videoCodec = videoCodec {
+						            // output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
+
 			output.setOutputSettings([AVVideoCodecKey: videoCodec], for: output.connection(with: .video)!)
+
 		}
 
 		super.init()
@@ -165,20 +183,38 @@ public final class Aperture: NSObject {
         // })
 	}
     @objc func updateRecording(){
-		output.stopRecording()
-        timerCount += 1
-        output.startRecording(to: tempFile(), recordingDelegate: self)
+		            output.stopRecording()
+            timerCount += 1
+            output.startRecording(to: tempFile(), recordingDelegate: self)
+
+        // if isRecording{
+        //     output2.startRecording(to: tempFile(), recordingDelegate: self)
+        //     output.stopRecording()
+        //     timerCount += 1
+        // }
+        // else if isRecording2{
+        //     output.startRecording(to: tempFile(), recordingDelegate: self)
+        //     output2.stopRecording()
+        //     timerCount += 1
+        // }
 
     }
     func tempFile() -> URL{
         let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
         let documentPath_ = searchPaths.first
-        let pathToSave = "\(documentPath_!)/tk/screenCapture\(timerCount).mp4"
+        let pathToSave = "\(documentPath_!)/tkko/screenCapture\(timerCount).mp4"
         return URL(fileURLWithPath: pathToSave)
     }
 
 	public func stop() {
-		output.stopRecording()
+        if isRecording{
+
+
+            output.stopRecording()
+        }
+        // else if isRecording2{
+        //     output2.stopRecording()
+        // }
 
 		// This prevents a race condition in Apple's APIs with the above and below calls.
 		sleep(for: 0.1)
