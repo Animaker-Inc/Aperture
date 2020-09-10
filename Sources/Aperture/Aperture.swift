@@ -69,26 +69,27 @@ public final class Aperture: NSObject {
 		} else {
 			throw Error.couldNotAddScreen
 		}
-
+        if session.canAddOutput(output2) {
+            session.addOutput(output2)
+        } else {
+            throw Error.couldNotAddOutput
+        }
 		if session.canAddOutput(output) {
 			session.addOutput(output)
 		} else {
 			throw Error.couldNotAddOutput
 		}
         
-        if session.canAddOutput(output2) {
-            session.addOutput(output2)
-        } else {
-            throw Error.couldNotAddOutput
-        }
+
 
 
 		// TODO: Default to HEVC when on 10.13 or newer and encoding is hardware supported. Without hardware encoding I got 3 FPS full screen recording.
 		// TODO: Find a way to detect hardware encoding support.
 		// Hardware encoding is supported on 6th gen Intel processor or newer.
 		if let videoCodec = videoCodec {
+						            output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
+
 			output.setOutputSettings([AVVideoCodecKey: videoCodec], for: output.connection(with: .video)!)
-			            output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
 
 		}
 
@@ -204,7 +205,7 @@ public final class Aperture: NSObject {
 	public func stop() {
         if isRecording{
 
-			
+
             output.stopRecording()
         }
         else if isRecording2{
