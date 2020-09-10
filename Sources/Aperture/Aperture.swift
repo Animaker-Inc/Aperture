@@ -13,7 +13,7 @@ public final class Aperture: NSObject {
 	var destination: URL
 	private let session: AVCaptureSession
 	private let output: AVCaptureMovieFileOutput
-	    // private let output2: AVCaptureMovieFileOutput
+	    private let output2: AVCaptureMovieFileOutput
 
 	private var activity: NSObjectProtocol?
 
@@ -25,8 +25,8 @@ public final class Aperture: NSObject {
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
 	public var isPaused: Bool { output.isRecordingPaused }
-	//     public var isRecording2: Bool { output2.isRecording }
-    // public var isPaused2: Bool { output2.isRecordingPaused }
+	    public var isRecording2: Bool { output2.isRecording }
+    public var isPaused2: Bool { output2.isRecordingPaused }
 
     var timer = Timer()
     var timerCount = 0
@@ -42,13 +42,13 @@ public final class Aperture: NSObject {
 		session = AVCaptureSession()
 
 		self.output = output
-		        // self.output2 = output
+		        self.output2 = AVCaptureMovieFileOutput()
 
 
 		// Needed because otherwise there is no audio on videos longer than 10 seconds.
 		// https://stackoverflow.com/a/26769529/64949
 		output.movieFragmentInterval = .invalid
-        // output2.movieFragmentInterval = .invalid
+        output2.movieFragmentInterval = .invalid
 
 		if let audioDevice = audioDevice {
 			if !audioDevice.hasMediaType(.audio) {
@@ -87,7 +87,7 @@ public final class Aperture: NSObject {
 		// TODO: Find a way to detect hardware encoding support.
 		// Hardware encoding is supported on 6th gen Intel processor or newer.
 		if let videoCodec = videoCodec {
-						            // output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
+						            output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
 
 			output.setOutputSettings([AVVideoCodecKey: videoCodec], for: output.connection(with: .video)!)
 
@@ -185,28 +185,28 @@ public final class Aperture: NSObject {
     @objc func updateRecording(){
         timerCount += 1
 
-        DispatchQueue.main.async(execute: {
-            self.output.stopRecording()
+        // DispatchQueue.main.async(execute: {
+        //     self.output.stopRecording()
 
-        })
+        // })
 
-        DispatchQueue.main.async(execute: {
+        // DispatchQueue.main.async(execute: {
 
-            self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
+        //     self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
 
-        })
+        // })
 
 
-        // if isRecording{
-        //     output2.startRecording(to: tempFile(), recordingDelegate: self)
-        //     output.stopRecording()
-        //     timerCount += 1
-        // }
-        // else if isRecording2{
-        //     output.startRecording(to: tempFile(), recordingDelegate: self)
-        //     output2.stopRecording()
-        //     timerCount += 1
-        // }
+        if isRecording{
+            output2.startRecording(to: tempFile(), recordingDelegate: self)
+            output.stopRecording()
+            // timerCount += 1
+        }
+        else if isRecording2{
+            output.startRecording(to: tempFile(), recordingDelegate: self)
+            output2.stopRecording()
+            // timerCount += 1
+        }
 
     }
     func tempFile() -> URL{
@@ -222,9 +222,9 @@ public final class Aperture: NSObject {
 
             output.stopRecording()
         }
-        // else if isRecording2{
-        //     output2.stopRecording()
-        // }
+        else if isRecording2{
+            output2.stopRecording()
+        }
 
 		// This prevents a race condition in Apple's APIs with the above and below calls.
 		sleep(for: 0.1)
