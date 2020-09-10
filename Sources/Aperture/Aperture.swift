@@ -69,11 +69,11 @@ public final class Aperture: NSObject {
 		} else {
 			throw Error.couldNotAddScreen
 		}
-        // if session.canAddOutput(output2) {
-        //     session.addOutput(output2)
-        // } else {
-        //     throw Error.couldNotAddOutput
-        // }
+        if session.canAddOutput(output2) {
+            session.addOutput(output2)
+        } else {
+            throw Error.couldNotAddOutput
+        }
 		if session.canAddOutput(output) {
 			session.addOutput(output)
 		} else {
