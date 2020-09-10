@@ -219,7 +219,7 @@ public final class Aperture: NSObject {
 		// })
 
             // timerCount += 1
-        }
+        // }
 
     }
     func tempFile() -> URL{
