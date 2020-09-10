@@ -17,6 +17,8 @@ public final class Aperture: NSObject {
 
 	public var onStart: (() -> Void)?
 	public var onFinish: ((Swift.Error?) -> Void)?
+		public var onFullFinish: ((Swift.Error?) -> Void)?
+
 	public var onPause: (() -> Void)?
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
@@ -157,18 +159,22 @@ public final class Aperture: NSObject {
 	public func start() {
 		session.startRunning()
 		output.startRecording(to: destination, recordingDelegate: self)
-		// timer = Timer.scheduledTimer(timeInterval: TimeInterval(100), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
-            self.updateRecording()
-        })
-
+		timer = Timer.scheduledTimer(timeInterval: TimeInterval(10), target: self, selector: (#selector(updateRecording)), userInfo: nil, repeats: true)
+        // DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+        //     self.updateRecording()
+        // })
 	}
-    func updateRecording(){
-         output.stopRecording()
-         timerCount += 1
-         var strURL : String = String(destination.absoluteString.dropLast(4))
-         strURL = strURL + "\(timerCount).mp4"
-         output.startRecording(to: URL(fileURLWithPath: strURL), recordingDelegate: self)
+    @objc func updateRecording(){
+		output.stopRecording()
+        timerCount += 1
+        output.startRecording(to: tempFile(), recordingDelegate: self)
+
+    }
+    func tempFile() -> URL{
+        let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
+        let documentPath_ = searchPaths.first
+        let pathToSave = "\(documentPath_!)/tk/screenCapture\(timerCount).mp4"
+        return URL(fileURLWithPath: pathToSave)
     }
 
 	public func stop() {
@@ -179,7 +185,8 @@ public final class Aperture: NSObject {
 
 		self.session.stopRunning()
 
-	
+		onFullFinish?(nil)
+
 
 	}
 
