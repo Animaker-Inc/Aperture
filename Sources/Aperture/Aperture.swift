@@ -183,9 +183,19 @@ public final class Aperture: NSObject {
         // })
 	}
     @objc func updateRecording(){
-		            output.stopRecording()
-            timerCount += 1
+        timerCount += 1
+
+        DispatchQueue.main.async(execute: {
+             output.stopRecording()
+
+        })
+
+        DispatchQueue.main.async(execute: {
+
             output.startRecording(to: tempFile(), recordingDelegate: self)
+
+        })
+
 
         // if isRecording{
         //     output2.startRecording(to: tempFile(), recordingDelegate: self)
