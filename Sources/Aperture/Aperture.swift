@@ -197,7 +197,7 @@ public final class Aperture: NSObject {
     func tempFile() -> URL{
         let searchPaths: [String] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)
         let documentPath_ = searchPaths.first
-        let pathToSave = "\(documentPath_!)/tk/screenCapture\(timerCount).mp4"
+        let pathToSave = "\(documentPath_!)/tkko/screenCapture\(timerCount).mp4"
         return URL(fileURLWithPath: pathToSave)
     }
 
