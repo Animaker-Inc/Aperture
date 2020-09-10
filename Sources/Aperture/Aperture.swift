@@ -25,8 +25,8 @@ public final class Aperture: NSObject {
 	public var onResume: (() -> Void)?
 	public var isRecording: Bool { output.isRecording }
 	public var isPaused: Bool { output.isRecordingPaused }
-	    public var isRecording2: Bool { output2.isRecording }
-    public var isPaused2: Bool { output2.isRecordingPaused }
+	//     public var isRecording2: Bool { output2.isRecording }
+    // public var isPaused2: Bool { output2.isRecordingPaused }
 
     var timer = Timer()
     var timerCount = 0
@@ -48,7 +48,7 @@ public final class Aperture: NSObject {
 		// Needed because otherwise there is no audio on videos longer than 10 seconds.
 		// https://stackoverflow.com/a/26769529/64949
 		output.movieFragmentInterval = .invalid
-        output2.movieFragmentInterval = .invalid
+        // output2.movieFragmentInterval = .invalid
 
 		if let audioDevice = audioDevice {
 			if !audioDevice.hasMediaType(.audio) {
@@ -69,11 +69,11 @@ public final class Aperture: NSObject {
 		} else {
 			throw Error.couldNotAddScreen
 		}
-        if session.canAddOutput(output2) {
-            session.addOutput(output2)
-        } else {
-            throw Error.couldNotAddOutput
-        }
+        // if session.canAddOutput(output2) {
+        //     session.addOutput(output2)
+        // } else {
+        //     throw Error.couldNotAddOutput
+        // }
 		if session.canAddOutput(output) {
 			session.addOutput(output)
 		} else {
@@ -87,7 +87,7 @@ public final class Aperture: NSObject {
 		// TODO: Find a way to detect hardware encoding support.
 		// Hardware encoding is supported on 6th gen Intel processor or newer.
 		if let videoCodec = videoCodec {
-						            output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
+						            // output2.setOutputSettings([AVVideoCodecKey: videoCodec], for: output2.connection(with: .video)!)
 
 			output.setOutputSettings([AVVideoCodecKey: videoCodec], for: output.connection(with: .video)!)
 
