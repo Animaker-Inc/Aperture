@@ -198,13 +198,26 @@ public final class Aperture: NSObject {
 
 
         if isRecording{
-            output2.startRecording(to: tempFile(), recordingDelegate: self)
-            output.stopRecording()
+			DispatchQueue.main.async(execute: {
+            self.output2.startRecording(to: self.tempFile(), recordingDelegate: self)
+
+			})
+			DispatchQueue.main.async(execute: {
+            self.output.stopRecording()
+
+			})
             // timerCount += 1
         }
         else if isRecording2{
-            output.startRecording(to: tempFile(), recordingDelegate: self)
-            output2.stopRecording()
+		DispatchQueue.main.async(execute: {
+            self.output.startRecording(to: self.tempFile(), recordingDelegate: self)
+
+		})
+		DispatchQueue.main.async(execute: {
+            self.output2.stopRecording()
+
+		})
+
             // timerCount += 1
         }
 
