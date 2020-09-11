@@ -18,8 +18,8 @@ public final class Aperture: NSObject {
 	private var activity: NSObjectProtocol?
 
 	public var onStart: (() -> Void)?
+	public var onUpdate: (() -> Void)?
 	public var onFinish: ((Swift.Error?) -> Void)?
-		public var onFullFinish: ((Swift.Error?) -> Void)?
 
 	public var onPause: (() -> Void)?
 	public var onResume: (() -> Void)?
@@ -243,7 +243,7 @@ public final class Aperture: NSObject {
 
 		self.session.stopRunning()
 
-		onFullFinish?(nil)
+		onFinish?(nil)
 
 
 	}
@@ -277,7 +277,7 @@ extension Aperture: AVCaptureFileOutputRecordingDelegate {
 
 	public func fileOutput(_ captureOutput: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Swift.Error?) {
 		shouldPreventSleep = false
-		onFinish?(error)
+		onUpdate?()
 	}
 
 	public func fileOutput(_ output: AVCaptureFileOutput, didPauseRecordingTo fileURL: URL, from connections: [AVCaptureConnection]) {
