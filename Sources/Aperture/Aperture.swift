@@ -19,6 +19,7 @@ public final class Aperture: NSObject {
 
 	public var onStart: (() -> Void)?
 	public var onUpdate: (() -> Void)?
+    public var onAvaiable: (() -> Void)?
 	public var onFinish: ((Swift.Error?) -> Void)?
 
 	public var onPause: (() -> Void)?
@@ -291,4 +292,10 @@ extension Aperture: AVCaptureFileOutputRecordingDelegate {
 	}
 
 	public func fileOutputShouldProvideSampleAccurateRecordingStart(_ output: AVCaptureFileOutput) -> Bool { true }
+    
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        print(presentationTimeStamp)
+        onAvaiable?()
+    }
 }
