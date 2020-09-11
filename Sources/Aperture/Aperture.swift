@@ -293,9 +293,10 @@ extension Aperture: AVCaptureFileOutputRecordingDelegate {
 
 	public func fileOutputShouldProvideSampleAccurateRecordingStart(_ output: AVCaptureFileOutput) -> Bool { true }
     
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        let presentationTimeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        print(presentationTimeStamp)
+}
+
+extension Aperture : AVCaptureFileOutputDelegate{
+    public func fileOutput(_ output: AVCaptureFileOutput, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         onAvaiable?()
     }
 }
